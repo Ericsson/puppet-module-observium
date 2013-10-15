@@ -1,7 +1,7 @@
 puppet-module-observium
 =======================
 
-Puppet module to manage Obversvium
+Puppet module to manage Observium
 
 ===
 
@@ -27,8 +27,8 @@ Dependencies
 
 Some functionality is dependent on other modules:
 
-- [stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
-- [apache](https://github.com/ghoneycutt/puppetlabs-apache)
+- [puppetlabs/stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
+- [puppetlabs/apache](https://github.com/ghoneycutt/puppetlabs-apache)
 
 # Parameters
 
@@ -175,4 +175,46 @@ users
 List of users to add
 
 - *Default*: undef
+
+cron_discovery_all_hour
+-----------------------
+Cron hour attribute for the discovery-all script
+
+- *Default*: '*/6'
+
+cron_discovery_all_minute
+-------------------------
+Cron minute attribute for the discovery-all script
+
+- *Default*: '33'
+
+cron_discovery_all_user
+-----------------------
+Cron user attribute for the discovery-all script
+
+- *Default*: 'root'
+
+cron_discovery_new_minute
+-------------------------
+Cron minute attribute for the discovery-new script
+
+- *Default*: '*/5'
+
+cron_discovery_new_user
+-----------------------
+Cron user attribute for the discovery-new script
+
+- *Default*: 'root'
+
+cron_poller_minute
+------------------
+Cron minute attribute for the poller script
+
+- *Default*: '*/5'
+
+cron_poller_user
+----------------
+Cron user attribute for the poller script
+
+- *Default*: 'root'
 

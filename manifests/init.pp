@@ -2,32 +2,41 @@
 #
 # This module manages Observium
 #
-class observium(
-  $base_path           = '/opt/observium',
-  $config_path         = '/opt/observium/config.php',
-  $config_mode         = '0755',
-  $config_owner        = 'root',
-  $config_group        = 'root',
-  $communities         = ['public'],
-  $devices             = undef,
-  $http_port           = '80',
-  $mysql_host          = undef,
-  $mysql_db            = undef,
-  $mysql_user          = undef,
-  $mysql_password      = undef,
-  $poller_threads      = '1',
-  $rrd_path            = '/opt/observium/rrd',
-  $rrd_mode            = '0755',
-  $rrd_owner           = 'root',
-  $rrd_group           = 'root',
-  $servername          = $::fqdn,
-  $snmp_version        = 'v2c',
-  $standalone          = false,
-  $svn_http_proxy_host = undef,
-  $svn_http_proxy_port = undef,
-  $svn_url             = 'http://www.observium.org/svn/observer/trunk',
-  $users               = undef,
+class observium (
+  $base_path                 = '/opt/observium',
+  $config_path               = '/opt/observium/config.php',
+  $config_mode               = '0755',
+  $config_owner              = 'root',
+  $config_group              = 'root',
+  $communities               = ['public'],
+  $devices                   = undef,
+  $http_port                 = '80',
+  $mysql_host                = undef,
+  $mysql_db                  = undef,
+  $mysql_user                = undef,
+  $mysql_password            = undef,
+  $poller_threads            = '1',
+  $rrd_path                  = '/opt/observium/rrd',
+  $rrd_mode                  = '0755',
+  $rrd_owner                 = 'root',
+  $rrd_group                 = 'root',
+  $servername                = $::fqdn,
+  $snmp_version              = 'v2c',
+  $standalone                = false,
+  $svn_http_proxy_host       = undef,
+  $svn_http_proxy_port       = undef,
+  $svn_url                   = 'http://www.observium.org/svn/observer/trunk',
+  $users                     = undef,
+  $cron_discovery_all_hour   = '*/6',
+  $cron_discovery_all_minute = '33',
+  $cron_discovery_all_user   = 'root',
+  $cron_discovery_new_minute = '*/5',
+  $cron_discovery_new_user   = 'root',
+  $cron_poller_minute        = '*/5',
+  $cron_poller_user          = 'root',
 ) {
+
+  include observium::apache
 
   case $::osfamily {
     'Debian': {
@@ -61,16 +70,14 @@ class observium(
     $svn_http_proxy_port_opt = ""
   }
 
-  include observium::apache
-
   if $users {
     validate_hash($users)
-    create_resources('observium::adduser', $users)
+    create_resources('observium::user', $users)
   }
 
   if $devices {
     validate_array($devices)
-    observium::add_device { $devices: }
+    observium::device { $devices: }
   }
 
   package { 'observium_packages':
@@ -86,7 +93,7 @@ class observium(
   }
 
   exec { 'observium-svn-co':
-    path    => '/usr/bin:/bin',
+    path    => '/bin:/usr/bin:/usr/local/bin',
     command => "svn co ${svn_http_proxy_host_opt} ${svn_http_proxy_port_opt} ${svn_url} observium",
     cwd     => '/opt',
     creates => "${base_path}/poller.php",
@@ -122,7 +129,7 @@ class observium(
   }
 
   exec { 'update_db':
-    path        => '/usr/bin:/bin',
+    path        => '/bin:/usr/bin:/usr/local/bin',
     command     => 'php includes/update/update.php',
     cwd         => $base_path,
     refreshonly => true,
@@ -130,21 +137,21 @@ class observium(
 
   cron { 'discovery-all':
     command => "${base_path}/discovery.php -h all >> /dev/null 2>&1",
-    user    => 'root',
-    minute  => '33',
-    hour    => '*/6',
+    user    => $cron_discovery_all_user,
+    minute  => $cron_discovery_all_minute,
+    hour    => $cron_discovery_all_hour,
   }
 
   cron { 'discovery-new':
     command => "${base_path}/discovery.php -h new >> /dev/null 2>&1",
-    user    => 'root',
-    minute  => '*/5',
+    user    => $cron_discovery_new_user,
+    minute  => $cron_discovery_new_minute,
   }
 
   cron { 'poller':
     command => "${base_path}/poller-wrapper.py ${poller_threads} >> /dev/null 2>&1",
-    user    => 'root',
-    minute  => '*/5',
+    user    => $cron_poller_user,
+    minute  => $cron_poller_minute,
   }
 
 #  svn::checkout { "observium-${svn_branch}":
@@ -158,5 +165,4 @@ class observium(
 #    http_proxy_p'rt => '8080',
 #    refreshonly     => true,
 #  }
-
 }

@@ -13,5 +13,4 @@ class observium::apache {
     configure_firewall => false,
     override           => 'All',
   }
-
 }
