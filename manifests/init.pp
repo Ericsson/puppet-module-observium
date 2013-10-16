@@ -15,6 +15,7 @@ class observium (
   $mysql_db                  = undef,
   $mysql_user                = undef,
   $mysql_password            = undef,
+  $packages                  = 'USE_DEFAULTS',
   $poller_threads            = '1',
   $rrd_path                  = '/opt/observium/rrd',
   $rrd_mode                  = '0755',
@@ -53,7 +54,7 @@ class observium (
     }
   }
 
-  if $packages == undef {
+  if $packages == 'USE_DEFAULTS' {
     $my_packages = $default_packages
   } else {
     $my_packages = $packages
@@ -62,12 +63,12 @@ class observium (
   if $svn_http_proxy_host {
     $svn_http_proxy_host_opt = "--config-option servers:global:http-proxy-host=${svn_http_proxy_host}"
   } else {
-    $svn_http_proxy_host_opt = ""
+    $svn_http_proxy_host_opt = ''
   }
   if $svn_http_proxy_port {
     $svn_http_proxy_port_opt = "--config-option servers:global:http-proxy-port=${svn_http_proxy_port}"
   } else {
-    $svn_http_proxy_port_opt = ""
+    $svn_http_proxy_port_opt = ''
   }
 
   if $users {
@@ -102,10 +103,10 @@ class observium (
 
   file { 'observium_path':
     ensure => directory,
-    mode   => 0755,
+    name   => $base_path,
     owner  => 'root',
     group  => 'root',
-    name   => $base_path,
+    mode   => '0755',
   }
 
   file { 'observium_config':

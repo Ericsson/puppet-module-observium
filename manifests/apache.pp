@@ -1,7 +1,10 @@
+# == Class: observium::apache
+#
 class observium::apache {
 
   include apache
   include apache::params
+
   apache::mod { 'rewrite': }
 
   apache::vhost { 'observium':
