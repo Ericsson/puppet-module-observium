@@ -28,7 +28,7 @@ Dependencies
 Some functionality is dependent on other modules:
 
 - [puppetlabs/stdlib](https://github.com/puppetlabs/puppetlabs-stdlib)
-- [puppetlabs/apache](https://github.com/ghoneycutt/puppetlabs-apache)
+- [puppetlabs/apache](https://github.com/puppetlabs/puppetlabs-apache)
 
 # Parameters
 

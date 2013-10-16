@@ -5,20 +5,20 @@
 ## Have a look in includes/defaults.inc.php for examples of settings you can set here. DO NOT EDIT defaults.inc.php!
 
 // Database config
-$config['db_host'] = "<%= mysql_host %>";
-$config['db_user'] = "<%= mysql_user %>";
-$config['db_pass'] = "<%= mysql_password %>";
-$config['db_name'] = "<%= mysql_db %>";
+$config['db_host'] = "<%= @mysql_host %>";
+$config['db_user'] = "<%= @mysql_user %>";
+$config['db_pass'] = "<%= @mysql_password %>";
+$config['db_name'] = "<%= @mysql_db %>";
 
 // Location
-$config['install_dir']  = "<%= base_path %>";
+$config['install_dir']  = "<%= @base_path %>";
 
 // Thie should *only* be set if you want to *force* a particular hostname/port
 // It will prevent the web interface being usable form any other hostname
 #$config['base_url']        = "http://observium.company.com";
 
 // Default community list to use when adding/discovering
-$communities = array(<% communities.each do |community| %>"<%= community -%>",<% end -%>);
+$communities = array(<% communities.each do |community| %>"<%= @community -%>",<% end -%>);
 $config['snmp']['community'] = $communities;
 
 // Authentication Model

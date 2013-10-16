@@ -8,4 +8,4 @@ description 'Manages Observium, including users and devices'
 project_page 'https://github.com/Ericsson/puppet-module-observium'
 
 dependency 'puppetlabs/stdlib', '3.2.x'
-dependency 'ghoneycutt/apache', '>= 0.0.1'
+dependency 'puppetlabs/apache', '>= 0.5.0'
