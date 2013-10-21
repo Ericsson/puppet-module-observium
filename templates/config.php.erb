@@ -18,7 +18,7 @@ $config['install_dir']  = "<%= @base_path %>";
 #$config['base_url']        = "http://observium.company.com";
 
 // Default community list to use when adding/discovering
-$communities = array(<% communities.each do |community| %>"<%= @community -%>",<% end -%>);
+$communities = array(<% communities.each do |community| %>"<%= community -%>",<% end -%>);
 $config['snmp']['community'] = $communities;
 
 // Authentication Model

@@ -24,9 +24,6 @@ class observium (
   $servername                = $::fqdn,
   $snmp_version              = 'v2c',
   $standalone                = false,
-  $svn_http_proxy_host       = undef,
-  $svn_http_proxy_port       = undef,
-  $svn_url                   = 'http://www.observium.org/svn/observer/trunk',
   $users                     = undef,
   $cron_discovery_all_hour   = '*/6',
   $cron_discovery_all_minute = '33',
@@ -41,7 +38,7 @@ class observium (
 
   case $::osfamily {
     'Debian': {
-      $default_packages = ['libapache2-mod-php5','php5-cli','php5-mysql',
+      $default_packages = ['observium','libapache2-mod-php5','php5-cli','php5-mysql',
                             'php5-gd','php5-snmp','php-pear','snmp',
                             'graphviz','php5-mcrypt','subversion',
                             'mysql-client','rrdtool','fping',
@@ -58,17 +55,6 @@ class observium (
     $my_packages = $default_packages
   } else {
     $my_packages = $packages
-  }
-
-  if $svn_http_proxy_host {
-    $svn_http_proxy_host_opt = "--config-option servers:global:http-proxy-host=${svn_http_proxy_host}"
-  } else {
-    $svn_http_proxy_host_opt = ''
-  }
-  if $svn_http_proxy_port {
-    $svn_http_proxy_port_opt = "--config-option servers:global:http-proxy-port=${svn_http_proxy_port}"
-  } else {
-    $svn_http_proxy_port_opt = ''
   }
 
   if $users {
@@ -91,14 +77,6 @@ class observium (
       ensure => installed,
       name   => $default_packages_standalone,
     }
-  }
-
-  exec { 'observium-svn-co':
-    path    => '/bin:/usr/bin:/usr/local/bin',
-    command => "svn co ${svn_http_proxy_host_opt} ${svn_http_proxy_port_opt} ${svn_url} observium",
-    cwd     => '/opt',
-    creates => "${base_path}/poller.php",
-    require => File['observium_path'],
   }
 
   file { 'observium_path':
@@ -154,16 +132,4 @@ class observium (
     user    => $cron_poller_user,
     minute  => $cron_poller_minute,
   }
-
-#  svn::checkout { "observium-${svn_branch}":
-#    reposerver      => 'www.observium.org',
-#    method          => 'http',
-#    repopath        => 'svn/observer',
-#    branch          => $svn_branch,
-#    workingdir      => $base_path,
-#    localuser       => 'puppet',
-#    http_proxy_host => 'www-proxy.ericsson.se',
-#    http_proxy_p'rt => '8080',
-#    refreshonly     => true,
-#  }
 }
