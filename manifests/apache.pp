@@ -16,4 +16,12 @@ class observium::apache {
     configure_firewall => false,
     override           => 'All',
   }
+
+  if $::osfamily == 'Debian' {
+    file { 'default-vhost':
+      ensure => absent,
+      path   => '/etc/apache2/sites-enabled/000-default',
+      notify => Service['httpd'],
+    }
+  }
 }
