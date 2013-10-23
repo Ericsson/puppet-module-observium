@@ -9,5 +9,11 @@ describe 'observium' do
     end
     it { should include_class('observium')}
 
+    it do
+      should contain_file('default-vhost').with({
+        'ensure' => 'absent',
+      })
+    end
+
   end
 end
