@@ -23,7 +23,6 @@ class observium (
   $rrd_group                 = 'root',
   $servername                = $::fqdn,
   $snmp_version              = 'v2c',
-  $standalone                = false,
   $users                     = undef,
   $cron_discovery_all_hour   = '*/6',
   $cron_discovery_all_minute = '33',
@@ -38,13 +37,7 @@ class observium (
 
   case $::osfamily {
     'Debian': {
-      $default_packages = ['observium','libapache2-mod-php5','php5-cli','php5-mysql',
-                            'php5-gd','php5-snmp','php-pear','snmp',
-                            'graphviz','php5-mcrypt','subversion',
-                            'mysql-client','rrdtool','fping',
-                            'imagemagick','whois','mtr-tiny','nmap','ipmitool',
-                            'python-mysqldb']
-      $default_packages_standalone = ['mysql-server']
+      $default_packages = 'observium'
     }
     default: {
       fail("Module observium is supported on osfamily Debian. Your osfamily is identified as ${::osfamily}")
@@ -68,15 +61,8 @@ class observium (
   }
 
   package { 'observium_packages':
-    ensure => installed,
-    name   => $my_packages,
-  }
-
-  if $standalone == true {
-    package { 'observium_standalone_pkgs':
-      ensure => installed,
-      name   => $default_packages_standalone,
-    }
+    ensure  => installed,
+    name    => $my_packages,
   }
 
   file { 'observium_path':
@@ -94,7 +80,7 @@ class observium (
     owner   => $config_owner,
     group   => $config_group,
     content => template('observium/config.php.erb'),
-    require => File['observium_path'],
+    require => Package['observium_packages'],
     notify  => Exec['update_db'],
   }
 

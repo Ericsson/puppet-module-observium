@@ -11,5 +11,6 @@ define observium::device() {
     command => "php add_device.php ${hostname}",
     cwd     => $observium::base_path,
     onlyif  => "test -z `${mysql_cmd}`",
+    require => Package['observium_packages'],
   }
 }

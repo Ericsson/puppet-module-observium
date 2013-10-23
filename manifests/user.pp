@@ -13,5 +13,6 @@ define observium::user(
     command => "php adduser.php ${username} ${password} ${level}",
     cwd     => $observium::base_path,
     onlyif  => "test -z `mysql -h ${observium::mysql_host} -u ${observium::mysql_user} -p${observium::mysql_password} -s -e \"${check_query}\" ${observium::mysql_db}`",
+    require => Package['observium_packages'],
   }
 }
