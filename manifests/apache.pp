@@ -2,7 +2,7 @@
 #
 class observium::apache {
 
-  include apache
+  #include apache
   include apache::params
 
   apache::mod { 'rewrite': }
@@ -13,7 +13,7 @@ class observium::apache {
     docroot            => "${observium::base_path}/html",
     logroot            => "${observium::base_path}/logs",
     servername         => $observium::servername,
-    configure_firewall => false,
+    #configure_firewall => false,
     override           => 'All',
   }
 }
