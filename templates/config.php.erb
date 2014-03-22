@@ -21,6 +21,12 @@ $config['install_dir']  = "<%= @base_path %>";
 $communities = array(<% communities.each do |community| %>"<%= community -%>",<% end -%>);
 $config['snmp']['community'] = $communities;
 
+<% if @smokeping_directory %>
+$config['smokeping']['dir']     = "<% @smokeping_directory %>";
+<% end %>
+
+
+
 // Authentication Model
 $config['auth_mechanism'] = "mysql";    // default, other options: ldap, http-auth, please see documentation for config help
 

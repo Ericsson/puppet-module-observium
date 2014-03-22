@@ -21,6 +21,7 @@ class observium (
   $rrd_mode                  = '0755',
   $rrd_owner                 = 'root',
   $rrd_group                 = 'root',
+  $smokeping_directory       = undef,
   $servername                = $::fqdn,
   $snmp_version              = 'v2c',
   $users                     = undef,
