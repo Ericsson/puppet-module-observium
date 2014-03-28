@@ -22,7 +22,7 @@ $communities = array(<% communities.each do |community| %>"<%= community -%>",<%
 $config['snmp']['community'] = $communities;
 
 <% if @smokeping_directory %>
-$config['smokeping']['dir']     = "<% @smokeping_directory %>";
+$config['smokeping']['dir']     = "<%= @smokeping_directory %>";
 <% end %>
 
 
