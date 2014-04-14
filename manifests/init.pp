@@ -33,6 +33,7 @@ class observium (
   $cron_poller_minute        = '*/5',
   $cron_poller_user          = 'root',
   $api_enabled               = 0,
+  $api_modules               = [],
 ) {
 
   include observium::apache

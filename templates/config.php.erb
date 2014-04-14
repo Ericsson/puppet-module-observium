@@ -39,7 +39,12 @@ $config['alerts']['alerter']['default']['type']    = "email";
 $config['alerts']['alerter']['default']['contact'] = "you@yourdomain.org";
 $config['alerts']['alerter']['default']['enable']  = TRUE;
 
-$config['api']['enabled'] = <%= @api_enabled %>;
+<% if @api_enabled %>
+$config['api']['module'] = 1;
+<% @api_modules.each do |module_name| -%>
+$config['api']['module']['<%= module_name %>'] = 1;
+<% end -%>
+<% end -%>
 
 // End config.php
 
