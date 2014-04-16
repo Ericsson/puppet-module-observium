@@ -9,6 +9,7 @@ class observium (
   $config_owner              = 'root',
   $config_group              = 'root',
   $communities               = ['public'],
+  $autodiscovery_ips         = ["127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"],
   $devices                   = undef,
   $http_port                 = '80',
   $mysql_host                = undef,
