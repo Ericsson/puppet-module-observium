@@ -55,5 +55,19 @@ $config['autodiscovery']['ip_nets']        = array(
 "<%= autodisc_ip %>",
 <% end -%>);  // Networks to permit autodiscovery
 
+//front page 
+$config['frontpage']['eventlog']['items'] = <%= @frontpage_eventlog %>;
+
+<% if @frontpage_order.include?('overall_traffic') -%>
+$config['frontpage']['overall_traffic'] = true;
+<% end -%>
+
+$config['frontpage']['order'] = array(
+<% @frontpage_order.each do |frontpage_element| -%>
+"<%= frontpage_element %>",
+<% end -%>
+
+);
+
 // End config.php
 

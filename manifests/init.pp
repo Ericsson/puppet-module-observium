@@ -36,6 +36,8 @@ class observium (
   $api_enabled               = 0,
   $api_modules               = [],
   $refresh_time              = undef,
+  $frontpage_order = ['device_status', 'eventlog', 'eventlog'],
+  $frontpage_eventlog = '15',
 ) {
 
   include observium::apache
