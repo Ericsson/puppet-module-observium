@@ -53,6 +53,8 @@ class observium (
 
   if $packages == 'USE_DEFAULTS' {
     $my_packages = $default_packages
+  } else if $packages == undef {
+    $my_packages = undef
   } else {
     $my_packages = $packages
   }
@@ -66,12 +68,14 @@ class observium (
     validate_array($devices)
     observium::device { $devices: }
   }
-/*
-  package { 'observium_packages':
-    ensure  => installed,
-    name    => $my_packages,
+
+  if $my_packages {
+    package { 'observium_packages':
+      ensure  => installed,
+      name    => $my_packages,
+    }
   }
-*/
+
   file { 'observium_path':
     ensure => directory,
     name   => $base_path,
@@ -87,7 +91,9 @@ class observium (
     owner   => $config_owner,
     group   => $config_group,
     content => template('observium/config.php.erb'),
-    # require => Package['observium_packages'],
+    if $my_packages {
+    require => Package['observium_packages'],
+    }
     notify  => Exec['update_db'],
   }
 
