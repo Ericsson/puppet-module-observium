@@ -9,7 +9,7 @@ class observium (
   $config_owner              = 'root',
   $config_group              = 'root',
   $communities               = ['public'],
-  $autodiscovery_ips         = ["127.0.0.0/8", "192.168.0.0/16", "10.0.0.0/8", "172.16.0.0/12"],
+  $autodiscovery_ips         = ['127.0.0.0/8', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12'],
   $devices                   = undef,
   $http_port                 = '80',
   $mysql_host                = undef,
@@ -33,11 +33,11 @@ class observium (
   $cron_discovery_new_user   = 'root',
   $cron_poller_minute        = '*/5',
   $cron_poller_user          = 'root',
-  $api_enabled               = 0,
-  $api_modules               = [],
+  $api_enabled               = false,
+  $api_modules               = undef,
   $refresh_time              = undef,
-  $frontpage_order = ['device_status', 'eventlog', 'eventlog'],
-  $frontpage_eventlog = '15',
+  $frontpage_order           = ['device_status', 'eventlog', 'eventlog'],
+  $frontpage_eventlog        = '15',
 ) {
 
   include observium::apache
