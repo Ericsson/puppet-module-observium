@@ -85,6 +85,11 @@ class observium (
     mode   => '0755',
   }
 
+  if $my_packages {
+    $observium_config_require = Package['observium_packages']
+  } else {
+    $observium_config_require = undef
+  }
   file { 'observium_config':
     ensure  => present,
     path    => $config_path,
@@ -92,9 +97,7 @@ class observium (
     owner   => $config_owner,
     group   => $config_group,
     content => template('observium/config.php.erb'),
-    if $my_packages {
-    require => Package['observium_packages'],
-    }
+    require => $observium_config_require,
     notify  => Exec['update_db'],
   }
 
