@@ -1,8 +1,9 @@
 # == Class: observium::apache
 #
 class observium::apache {
-
-  #include apache
+  if $observium::manage_apache {
+    include apache
+  }
   include apache::params
 
   apache::mod { 'rewrite': }
