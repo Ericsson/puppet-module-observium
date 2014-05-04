@@ -9,6 +9,7 @@ class observium (
   $config_owner              = 'root',
   $config_group              = 'root',
   $communities               = ['public'],
+  $autodiscovery_ips         = ['127.0.0.0/8', '192.168.0.0/16', '10.0.0.0/8', '172.16.0.0/12'],
   $devices                   = undef,
   $http_port                 = '80',
   $mysql_host                = undef,
@@ -21,6 +22,7 @@ class observium (
   $rrd_mode                  = '0755',
   $rrd_owner                 = 'root',
   $rrd_group                 = 'root',
+  $smokeping_directory       = undef,
   $servername                = $::fqdn,
   $snmp_version              = 'v2c',
   $users                     = undef,
@@ -31,6 +33,12 @@ class observium (
   $cron_discovery_new_user   = 'root',
   $cron_poller_minute        = '*/5',
   $cron_poller_user          = 'root',
+  $api_enabled               = false,
+  $api_modules               = undef,
+  $refresh_time              = undef,
+  $frontpage_order           = ['device_status', 'eventlog', 'eventlog'],
+  $frontpage_eventlog        = '15',
+  $manage_apache             = true,
 ) {
 
   include observium::apache
@@ -46,6 +54,8 @@ class observium (
 
   if $packages == 'USE_DEFAULTS' {
     $my_packages = $default_packages
+  } elsif $packages == undef {
+    $my_packages = undef
   } else {
     $my_packages = $packages
   }
@@ -60,9 +70,11 @@ class observium (
     observium::device { $devices: }
   }
 
-  package { 'observium_packages':
-    ensure  => installed,
-    name    => $my_packages,
+  if $my_packages {
+    package { 'observium_packages':
+      ensure  => installed,
+      name    => $my_packages,
+    }
   }
 
   file { 'observium_path':
@@ -73,6 +85,11 @@ class observium (
     mode   => '0755',
   }
 
+  if $my_packages {
+    $observium_config_require = Package['observium_packages']
+  } else {
+    $observium_config_require = undef
+  }
   file { 'observium_config':
     ensure  => present,
     path    => $config_path,
@@ -80,7 +97,7 @@ class observium (
     owner   => $config_owner,
     group   => $config_group,
     content => template('observium/config.php.erb'),
-    require => Package['observium_packages'],
+    require => $observium_config_require,
     notify  => Exec['update_db'],
   }
 

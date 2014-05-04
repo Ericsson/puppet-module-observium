@@ -21,6 +21,12 @@ $config['install_dir']  = "<%= @base_path %>";
 $communities = array(<% communities.each do |community| %>"<%= community -%>",<% end -%>);
 $config['snmp']['community'] = $communities;
 
+<% if @smokeping_directory %>
+$config['smokeping']['dir']     = "<%= @smokeping_directory %>";
+<% end %>
+
+
+
 // Authentication Model
 $config['auth_mechanism'] = "mysql";    // default, other options: ldap, http-auth, please see documentation for config help
 
@@ -33,6 +39,37 @@ $config['alerts']['alerter']['default']['type']    = "email";
 $config['alerts']['alerter']['default']['contact'] = "you@yourdomain.org";
 $config['alerts']['alerter']['default']['enable']  = TRUE;
 
+<% if @api_enabled %>
+$config['api']['enabled'] = 1;
+<% if @api_modules %>
+<% @api_modules.each do |module_name| -%>
+$config['api']['module']['<%= module_name %>'] = 1;
+<% end -%>
+<% end -%>
+<% end -%>
+
+<% if @refresh_time -%>
+$config['page_refresh']     = "<%= @refresh_time %>";  ## Refresh the page every xx seconds
+<% end -%>
+
+$config['autodiscovery']['ip_nets']        = array(
+<% @autodiscovery_ips.each do |autodisc_ip| -%>
+"<%= autodisc_ip %>",
+<% end -%>);  // Networks to permit autodiscovery
+
+//front page 
+$config['frontpage']['eventlog']['items'] = <%= @frontpage_eventlog %>;
+
+<% if @frontpage_order.include?('overall_traffic') -%>
+$config['frontpage']['overall_traffic'] = true;
+<% end -%>
+
+$config['frontpage']['order'] = array(
+<% @frontpage_order.each do |frontpage_element| -%>
+"<%= frontpage_element %>",
+<% end -%>
+
+);
 
 // End config.php
 
