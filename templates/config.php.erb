@@ -41,8 +41,10 @@ $config['alerts']['alerter']['default']['enable']  = TRUE;
 
 <% if @api_enabled %>
 $config['api']['enabled'] = 1;
+<% if @api_modules %>
 <% @api_modules.each do |module_name| -%>
 $config['api']['module']['<%= module_name %>'] = 1;
+<% end -%>
 <% end -%>
 <% end -%>
 
