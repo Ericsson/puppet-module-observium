@@ -54,7 +54,7 @@ class observium (
 
   if $packages == 'USE_DEFAULTS' {
     $my_packages = $default_packages
-  } else if $packages == undef {
+  } elsif $packages == undef {
     $my_packages = undef
   } else {
     $my_packages = $packages
